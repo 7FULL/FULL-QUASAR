@@ -27,7 +27,7 @@
               <q-input v-model="registerData.password" label="Contraseña" type="password" required minlength="7" />
               <q-input v-model="registerData.confirmPassword" label="Confirmar contraseña" type="password" required minlength="7" />
               <q-input v-model="registerData.phone" label="Número de teléfono" type="tel" required class="q-mb-md" />
-              <Checkbox />
+              <Checkbox v-model="registerData.captcha" />
               <q-checkbox v-model="registerData.agree" :false-value="null" required class="q-mt-sm">
                 Acepto los términos y condiciones
               </q-checkbox>
@@ -102,7 +102,8 @@
       password: '',
       confirmPassword: '',
       phone: '',
-      agree: null
+      agree: null,
+      captcha: ''
   });
 
   const userData = ref({
@@ -268,7 +269,7 @@
         if (registerData.value.password != registerData.value.confirmPassword){
             error.value.type = true;
             error.value.message = "Las contraseñas no coinciden";
-        }else if(registerData.value.agree == true){
+        }else if(registerData.value.agree == true && registerData.value.captcha){
           if (!registerData.value.username.includes("@")){
             userData.value.name = registerData.value.username;
         }else{
@@ -300,8 +301,14 @@
             error.value.message = "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
           });
         }else{
-          error.value.type = true;
-          error.value.message = "Debe aceptar los términos y condiciones";
+          if (!registerData.value.captcha){
+            error.value.type = true;
+            error.value.message = "Debes completar el captcha";
+          }else{
+            console.log(registerData.value.agree);
+            error.value.type = true;
+            error.value.message = "Debe aceptar los términos y condiciones";
+          }
         }
 
         // Resetear el formulario
@@ -310,6 +317,7 @@
         registerData.value.password = '';
         registerData.value.confirmPassword = '';
         registerData.value.phone = '';
+        registerData.value.agree = null;
     };
 
   </script>
