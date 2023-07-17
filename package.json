@@ -15,8 +15,11 @@
   "dependencies": {
     "@quasar/extras": "^1.16.4",
     "@unhead/vue": "^1.1.30",
+    "@vime/core": "^5.4.0",
+    "@vime/vue-next": "^5.4.0",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
+    "socket.io-client": "^4.7.1",
     "vue": "^3.0.0",
     "vue-recaptcha": "^3.0.0-alpha.6",
     "vue-router": "^4.0.0"

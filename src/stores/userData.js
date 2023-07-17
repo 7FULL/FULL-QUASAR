@@ -13,12 +13,12 @@ export const userDataStore = defineStore("userDataStore", () => {
   };
 
   const resetData = () => {
-    userData.profile = "src/assets/img/logoUserDefault.png";
-    userData.name = "";
-    userData.email = "";
-    userData.phone = "";
-    userData.emailVerified = "";
-    userData.description = "";
+    userData.value.profile = "src/assets/img/logoUserDefault.png";
+    userData.value.name = "";
+    userData.value.email = "";
+    userData.value.phone = "";
+    userData.value.emailVerified = "";
+    userData.value.description = "";
     logged = false;
   };
 

@@ -1,105 +1,252 @@
 /* app global css */
-.wxl{
-    width: 100%;
+.wxl {
+  width: 100%;
 }
 
-.wlg{
-    width: 75%;
+.wlg {
+  width: 75%;
 }
 
-.wmd{
-    width: 50%;
+.wmd {
+  width: 50%;
 }
 
-.wsm{
-    width: 25%;
+.wsm {
+  width: 25%;
 }
 
-.wxs{
-    width: 10%;
+.wxs {
+  width: 10%;
 }
 
-.hxl{
-    height: 100%;
+.hxl {
+  height: 100%;
 }
 
-.hlg{
-    height: 75%;
+.hlg {
+  height: 75%;
 }
 
-.hmd{
-    height: 50%;
+.hmd {
+  height: 50%;
 }
 
-.hsm{
-    height: 25%;
+.hsm {
+  height: 25%;
 }
 
-.hxs{
-    height: 10%;
+.hxs {
+  height: 10%;
 }
 
-.wxls{
-    width: 90%
+.wxls {
+  width: 90%;
 }
 
-.wlgs{
-    width: 65%
+.wlgs {
+  width: 65%;
 }
 
-.wmds{
-    width: 40%
+.wmds {
+  width: 40%;
 }
 
-.wsms{
-    width: 15%
+.wsms {
+  width: 15%;
 }
 
-.hxls{
-    height: 90%;
+.hxls {
+  height: 90%;
 }
 
-.hlgs{
-    height: 65%;
+.hlgs {
+  height: 65%;
 }
 
-.hmds{
-    height: 40%;
+.hmds {
+  height: 40%;
 }
 
-.hsms{
-    height: 15%;
+.hsms {
+  height: 15%;
 }
 
-.wsmx{
-    width: 35%;
+.wsmx {
+  width: 35%;
 }
 
-.hsmx{
-    height: 35%;
+.hsmx {
+  height: 35%;
 }
 
-.wmdx{
-    width: 60%;
+.wmdx {
+  width: 60%;
 }
 
-.hmdx{
-    height: 60%;
+.hmdx {
+  height: 60%;
 }
 
-.wlgx{
-    width: 85%;
+.wlgx {
+  width: 85%;
 }
 
-.hlgx{
-    height: 85%;
+.hlgx {
+  height: 85%;
 }
 
-.w30{
-    width: 30%;
+.w30 {
+  width: 30%;
 }
 
+.mt-xs {
+  margin-top: 5%;
+}
 
+.mt-sm {
+  margin-top: 10%;
+}
 
+.mt-md {
+  margin-top: 15%;
+}
 
+.mt-lg {
+  margin-top: 20%;
+}
 
+.mt-xl {
+  margin-top: 25%;
+}
+
+.mt-xxl {
+  margin-top: 30%;
+}
+
+.mb-xs {
+  margin-bottom: 5%;
+}
+
+.mb-sm {
+  margin-bottom: 10%;
+}
+
+.mb-md {
+  margin-bottom: 15%;
+}
+
+.mb-lg {
+  margin-bottom: 20%;
+}
+
+.mb-xl {
+  margin-bottom: 25%;
+}
+
+.mb-xxl {
+  margin-bottom: 30%;
+}
+
+.mt-xxs {
+  margin-top: 2%;
+}
+
+.mb-xxs {
+  margin-bottom: 2%;
+}
+
+.mg-auto {
+  margin: auto;
+}
+
+.dp-block {
+  display: block;
+}
+
+.cl-wh {
+  color: white;
+}
+
+.cl-bl {
+  color: black;
+}
+
+.cl-re {
+  color: red;
+}
+
+.fs-xxs {
+  font-size: 0.5rem;
+}
+
+.fs-xs {
+  font-size: 0.75rem;
+}
+
+.fs-sm {
+  font-size: 1rem;
+}
+
+.fs-md {
+  font-size: 1.25rem;
+}
+
+.fs-lg {
+  font-size: 1.5rem;
+}
+
+.fs-xl {
+  font-size: 1.75rem;
+}
+
+.fs-xxl {
+  font-size: 2rem;
+}
+
+.fs-xxxl {
+  font-size: 2.25rem;
+}
+
+.fs-xxxxl {
+  font-size: 2.5rem;
+}
+
+.fs-xxxxxl {
+  font-size: 2.75rem;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.ml-xl {
+  margin-left: 100%;
+}
+
+.mr-xl {
+  margin-right: 100%;
+}
+
+.ml-lg {
+  margin-left: 75%;
+}
+
+.ml-90 {
+  margin-left: 90%;
+}
+
+.fs-xxxxxxl {
+  font-size: 3rem;
+}
+
+.dp-block {
+  display: block;
+}
+
+textarea {
+  resize: none;
+}
+
+div[class="q-pa-md q-gutter-sm"] {
+  margin-top: -14px;
+}

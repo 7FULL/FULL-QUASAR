@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh Lpr lff">
+  <q-layout view="hHh lpr lff">
     <q-header elevated>
       <q-toolbar class="flex justify-between bg-secondary">
         <div class="wxs">
@@ -96,7 +96,7 @@
       @logged="logged"
     ></login>
 
-    <q-page-container>
+    <q-page-container style="padding-top: 0%">
       <router-view />
     </q-page-container>
   </q-layout>

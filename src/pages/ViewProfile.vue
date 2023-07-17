@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="profile">
+    <q-card class="q-pa-md wsmx">
       <input
         type="file"
         ref="photo"
@@ -9,7 +9,7 @@
         accept="image/jpeg, image/png"
       />
       <div class="profile-header">
-        <q-avatar>
+        <q-avatar class="mg-auto dp-block" size="500%">
           <img
             class="profile-image"
             v-if="userStore.userData.profile != null"
@@ -25,6 +25,12 @@
           />
         </q-avatar>
         <q-btn
+          style="
+            position: absolute;
+            top: 5%;
+            left: 58%;
+            transform: translate(-50%, -50%);
+          "
           class="edit-button"
           flat
           round
@@ -34,85 +40,85 @@
         ></q-btn>
       </div>
       <div class="profile-info">
-        <h2>{{ userStore.userData.name }}</h2>
-        <q-textarea
+        <h2 class="text-center q-mt-md">{{ userStore.userData.name }}</h2>
+        <q-input
           class="description"
           v-model="userStore.userData.description"
-          placeholder="Biografía"
+          placeholder="Escribe una descripción..."
           @input="changed"
-        ></q-textarea>
-        <div class="field">
-          <q-input v-model="userStore.userData.email" readonly></q-input>
-          <q-btn
-            class="change-button"
-            flat
-            dense
-            color="primary"
-            @click="openModalEmail"
-            >Cambiar Email</q-btn
-          >
+          type="textarea"
+          label="Biografía"
+          filled
+          autogrow
+        ></q-input>
+
+        <div class="flex justify-evenly q-mb-md">
+          <div class="col">
+            <q-input
+              v-model="userStore.userData.email"
+              filled
+              disable
+              class="q-mt-md"
+            ></q-input>
+            <q-input
+              type="password"
+              v-model="passwordPlaceholder"
+              disable
+              filled
+              class="q-mt-md q-mb-md"
+            ></q-input>
+            <q-input
+              type="tel"
+              v-model="userStore.userData.phone"
+              disable
+              filled
+            ></q-input>
+          </div>
+
+          <div class="col q-ml-md">
+            <q-btn
+              class="mt-md mb-lg wxl"
+              flat
+              dense
+              color="primary"
+              @click="openModalEmail"
+              >Cambiar Email</q-btn
+            >
+            <q-btn
+              class="mt-xxs mb-md wxl"
+              flat
+              dense
+              color="primary"
+              @click="openModalPass"
+              >Cambiar Contraseña</q-btn
+            >
+            <q-btn
+              class="mt-xs wxl"
+              flat
+              color="primary"
+              @click="openModalPhone"
+              >Cambiar Teléfono</q-btn
+            >
+          </div>
         </div>
-        <div class="field">
-          <q-input
-            type="password"
-            v-model="passwordPlaceholder"
-            readonly
-          ></q-input>
-          <q-btn
-            class="change-button"
-            flat
-            dense
-            color="primary"
-            @click="openModalPass"
-            >Cambiar Contraseña</q-btn
-          >
-        </div>
-        <div class="field">
-          <q-input
-            type="tel"
-            v-model="userStore.userData.phone"
-            readonly
-          ></q-input>
-          <q-btn
-            class="change-button"
-            flat
-            dense
-            color="primary"
-            @click="openModalPhone"
-            >Cambiar Teléfono</q-btn
-          >
-        </div>
-        <div class="field">
-          <q-btn
-            class="delete"
-            flat
-            round
-            dense
-            color="negative"
-            @click="deleteAccount"
+
+        <div class="flex flex-center">
+          <q-btn class="q-mb-sm" outline color="negative" @click="deleteAccount"
             >ELIMINAR CUENTA</q-btn
           >
         </div>
       </div>
-      <div class="botones">
-        <q-btn
-          class="Salir"
-          flat
-          round
-          dense
-          color="negative"
-          @click="closeProfile"
+      <div class="botones flex justify-end">
+        <q-btn class="q-mr-sm" color="negative" @click="closeProfile"
           >Salir</q-btn
         >
-        <q-btn flat round dense color="primary" @click="editProfile"
-          >Guardar</q-btn
-        >
+        <q-btn color="primary" @click="editProfile">Guardar</q-btn>
       </div>
-    </div>
+    </q-card>
     <q-dialog v-model="isOpenPass">
       <q-card>
         <q-card-section>
-          <h2>Cambio de Contraseña</h2>
+          <h3>Cambio de Contraseña</h3>
           <q-form @submit="changePassword">
             <q-input
               type="password"
@@ -127,6 +133,7 @@
               v-model="changePass.newPassword"
               dense
               required
+              class="q-mb-md q-mt-md"
             ></q-input>
             <q-input
               type="password"
@@ -160,7 +167,7 @@
     <q-dialog v-model="isOpenMail">
       <q-card>
         <q-card-section>
-          <h2>Cambio de Email</h2>
+          <h3>Cambio de Email</h3>
           <q-form @submit="changeEmail">
             <q-input
               type="password"
@@ -175,6 +182,7 @@
               v-model="changeMail.newMail"
               dense
               required
+              class="q-mb-md q-mt-md"
             ></q-input>
             <q-card-actions align="right">
               <q-btn
@@ -201,7 +209,7 @@
     <q-dialog v-model="isOpenPhone">
       <q-card>
         <q-card-section>
-          <h2>Cambio de Teléfono</h2>
+          <h3>Cambio de Teléfono</h3>
           <q-form @submit="changePhone">
             <q-input
               type="password"
@@ -216,6 +224,7 @@
               v-model="changePhon.newPhone"
               dense
               required
+              class="q-mb-md q-mt-md"
             ></q-input>
             <q-card-actions align="right">
               <q-btn
@@ -242,7 +251,7 @@
     <q-dialog v-model="changingPassword">
       <q-card>
         <q-card-section>
-          <h2>Eliminacion de cuenta</h2>
+          <h3>Eliminacion de cuenta</h3>
           <q-form @submit="confirmPassword">
             <q-input
               type="password"
@@ -273,42 +282,14 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="error.type">
-      <q-card>
-        <q-card-section class="row items-center">
-          <img src="../assets/img/peligro.png" alt="Error" class="error-icon" />
-          <p>{{ error.message }}</p>
-          <q-btn
-            v-if="error.type !== 2"
-            label="Confirmar"
-            flat
-            round
-            dense
-            color="primary"
-            @click="clearError"
-          />
-          <q-btn
-            v-if="error.type === 2"
-            label="Confirmar"
-            flat
-            round
-            dense
-            color="primary"
-            @click="deleteUser"
-          />
-          <q-btn
-            v-if="error.type === 2"
-            label="Cancelar"
-            flat
-            round
-            dense
-            color="primary"
-            @click="clearError"
-            class="error-confirm"
-          />
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <PopUp
+      :open="pop.active"
+      :msg="pop.message"
+      title="Eliminar Cuenta"
+      cancel="true"
+      cancelText="Cancelar"
+      @closed="deleteUser"
+    />
   </q-page>
 </template>
 
@@ -318,20 +299,26 @@ import { ref } from "vue";
 import { userDataStore } from "../stores/userData.js";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
+import PopUp from "src/components/PopUp.vue";
 
 const passwordPlaceholder = ref("********");
 
 const $q = useQuasar();
 
-function showNotif(msg) {
+function showNotif(msg, color = "gray-4") {
   $q.notify({
     message: msg,
-    color: "gray-4",
+    color: color,
     position: "top",
     timeout: 1500,
     progress: true,
   });
 }
+
+const pop = ref({
+  active: false,
+  message: "",
+});
 
 const userStore = userDataStore();
 
@@ -380,16 +367,6 @@ const openModalPhone = () => {
   isOpenMail.value = false;
 };
 
-const clearError = () => {
-  error.value.type = 0;
-  error.value.message = "";
-};
-
-const error = ref({
-  type: 0, // 0: no error, 1: error
-  message: "",
-});
-
 const changePass = ref({
   oldPassword: "",
   confirmPassword: "",
@@ -433,22 +410,23 @@ const changeEmail = (e) => {
 
         //location.reload();
       } else if (data.status == 400) {
-        error.value.type = 1;
-        error.value.message = "Contraseña incorrecta";
+        showNotif("Contraseña incorrecta", "red-5");
       } else {
         console.log(data);
 
-        error.value.type = 1;
-        error.value.message =
-          "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+        showNotif(
+          "Parece que hubo un error con nuestras bases de datos, por favor intente de nuevo más tarde",
+          "red-5"
+        );
       }
     })
     .catch((exception) => {
       console.log(exception);
 
-      error.value.type = 1;
-      error.value.message =
-        "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+      showNotif(
+        "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde",
+        "red-5"
+      );
     });
 };
 
@@ -456,10 +434,10 @@ const changePassword = (e) => {
   e.preventDefault();
   // Lógica para cambiar la contraseña
   if (changePass.value.newPassword != changePass.value.confirmPassword) {
-    error.value.type = 1;
-    error.value.message = "Las contraseñas no coinciden";
+    showNotif("Las contraseñas no coinciden", "red-5");
 
-    console.log("Las contraseñas no coinciden");
+    changePass.value.newPassword = "";
+    changePass.value.confirmPassword = "";
   } else {
     fetch(
       "http://127.0.0.1:5000/api/users/password/" + userStore.userData.name,
@@ -481,22 +459,21 @@ const changePassword = (e) => {
           closeModalPass();
           showNotif("Contraseña cambiada correctamente");
         } else if (data.status == 400) {
-          error.value.type = 1;
-          error.value.message = "Contraseña incorrecta";
+          showNotif("Contraseña incorrecta", "red-5");
         } else {
-          console.log(data);
-
-          error.value.type = 1;
-          error.value.message =
-            "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+          showNotif(
+            "Parece que hubo un error con nuestras bases de datos, por favor intente de nuevo más tarde",
+            "red-5"
+          );
         }
       })
       .catch((exception) => {
         console.log(exception);
 
-        error.value.type = 1;
-        error.value.message =
-          "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+        showNotif(
+          "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde",
+          "red-5"
+        );
       });
   }
 };
@@ -526,22 +503,21 @@ const changePhone = (e) => {
       } else if (data.status == 400) {
         changePhon.value.password = "";
 
-        error.value.type = 1;
-        error.value.message = "Contraseña incorrecta";
+        showNotif(data.message, "red-5");
       } else {
-        console.log(data);
-
-        error.value.type = 1;
-        error.value.message =
-          "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+        showNotif(
+          "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde",
+          "red-5"
+        );
       }
     })
     .catch((exception) => {
       console.log(exception);
 
-      error.value.type = 1;
-      error.value.message =
-        "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+      showNotif(
+        "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde",
+        "red-5"
+      );
     });
 };
 
@@ -577,13 +553,13 @@ const editProfile = async () => {
               data.status == 413 ||
               data.status == 404
             ) {
-              error.value.type = 1;
-              error.value.message = data.message;
+              showNotif(data.message, "red-5");
             }
             if (data.status == 500) {
-              error.value.type = 1;
-              error.value.message =
-                "Parece que hay un problema con nuestras bases de datos. Inténtelo de nuevo más tarde";
+              showNotif(
+                "Parece que hay un problema con nuestras bases de datos. Inténtelo de nuevo más tarde",
+                "red-5"
+              );
             }
           } else {
             aux2 = true;
@@ -592,9 +568,10 @@ const editProfile = async () => {
         })
         .catch((exception) => {
           console.error(exception);
-          error.value.type = 1;
-          error.value.message =
-            "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
+          showNotif(
+            "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde",
+            "red-5"
+          );
         });
     }
 
@@ -615,25 +592,26 @@ const editProfile = async () => {
         if (data.status != 200) {
           //console.log("Descripción actualizada");
           if (data.status == 400 || data.status == 413 || data.status == 404) {
-            error.value.type = 1;
-            error.value.message = data.message;
+            showNotif(data.message, "red-5");
           }
           if (data.status == 500) {
-            error.value.type = 1;
-            error.value.message =
-              "Parece que hay un problema con nuestras bases de datos. Inténtelo de nuevo más tarde";
+            showNotif(
+              "Parece que hay un problema con nuestras bases de datos. Inténtelo de nuevo más tarde",
+              "red-5"
+            );
           }
         }
       })
       .catch((exception) => {
         console.error(exception);
-        error.value.type = 1;
-        error.value.message =
-          "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
+        showNotif(
+          "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde",
+          "red-5"
+        );
       });
 
     if (aux2) {
-      location.reload();
+      router.push({ name: "home" });
     }
 
     closeProfile();
@@ -670,13 +648,12 @@ const closeAll = () => {
 
 const confirmPassword = (e) => {
   e.preventDefault();
-  error.value.type = 2;
-  error.value.message = "¿Estas seguro de que quieres eliminar tu cuenta?";
+  pop.value.active = true;
+  pop.value.message = "¿Estas seguro de que quieres eliminar tu cuenta?";
 };
 
-const deleteUser = (e) => {
-  // Lógica para eliminar el usuario
-  e.preventDefault();
+const deleteUser = () => {
+  console.log(deleteAccountData.value);
   // Lógica para cambiar el email
   fetch("http://127.0.0.1:5000/api/users/" + userStore.userData.name, {
     method: "DELETE",
@@ -691,25 +668,25 @@ const deleteUser = (e) => {
         userStore.resetData();
         router.push({ name: "home" });
         showNotif("Cuenta eliminada correctamente");
+
+        pop.value.active = false;
+        pop.value.message = "";
       } else if (data.status == 401) {
-        console.log(data);
-
-        error.value.type = 1;
-        error.value.message = data.result;
+        showNotif(data.message, "red-5");
       } else {
-        console.log(data);
-
-        error.value.type = 1;
-        error.value.message =
-          "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+        showNotif(
+          "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde",
+          "red-5"
+        );
       }
     })
     .catch((exception) => {
       console.log(exception);
 
-      error.value.type = 1;
-      error.value.message =
-        "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde";
+      showNotif(
+        "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde",
+        "red-5"
+      );
     });
 };
 
