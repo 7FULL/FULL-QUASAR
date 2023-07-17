@@ -64,7 +64,7 @@
       </div>
     </div>
     <!-- Conectando... -->
-    <div class="wsm flex flex-center bg-white" v-else>
+    <div class="wsm flex flex-center bg-white chat-container" v-else>
       <q-spinner-ios size="100px" color="primary" />
     </div>
   </div>
@@ -166,6 +166,18 @@ function scrollToBottom() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 }
+
+const socketRMTP = new WebSocket("ws://localhost:8080/rtmp-status");
+
+socketRMTP.addEventListener("open", () => {
+  console.log("Conexión WebSocket establecida");
+});
+
+socketRMTP.addEventListener("message", (event) => {
+  const data = JSON.parse(event.data);
+  const activeConnections = data.nclients;
+  console.log("Número de conexiones activas:", activeConnections);
+});
 </script>
 
 <style scoped>
