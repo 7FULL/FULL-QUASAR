@@ -1,45 +1,90 @@
 <template>
   <q-page class="padding_cero">
-    <!--<Streaming src="http://localhost:8080/hls/test.m3u8" room="1" />-->
-    <div id="streamData"></div>
+    <div class="q-pa-md grid">
+      <div
+        v-for="(stream, index) in streams"
+        :key="index"
+        cols="12"
+        md="4"
+        sm="6"
+      >
+        <router-link :to="'/streaming/' + stream.name">
+          <q-card>
+            <q-card-section class="text-center">
+              <q-avatar>
+                <img
+                  :src="stream.photoUrl"
+                  alt="Stream Image"
+                  class="q-mb-md"
+                />
+              </q-avatar>
+              <div class="text-h6 xx-large">{{ stream.name }}</div>
+            </q-card-section>
+          </q-card>
+        </router-link>
+      </div>
+    </div>
   </q-page>
 </template>
 
 <script setup>
-import Streaming from "../components/StreamingChat.vue";
+import { ref, onMounted } from "vue";
 
-fetch("http://localhost:8080/stat")
-  .then((response) => response.text())
-  .then((data) => {
-    // Procesar los datos XML
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(data, "application/xml");
-    const streams = xmlDoc.getElementsByTagName("stream");
+const streams = ref([]);
 
-    // Recorrer los elementos de stream
-    for (let i = 0; i < streams.length; i++) {
-      const name = streams[i].getElementsByTagName("name")[0].textContent;
-      const time = streams[i].getElementsByTagName("time")[0].textContent;
-      const bwIn = streams[i].getElementsByTagName("bw_in")[0].textContent;
-      const bwOut = streams[i].getElementsByTagName("bw_out")[0].textContent;
-      // Obtén otros datos que desees mostrar
+onMounted(() => {
+  fetch("http://localhost:8080/stat")
+    .then((response) => response.text())
+    .then(async (data) => {
+      // Procesar los datos XML
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(data, "application/xml");
+      const streamElements = xmlDoc.getElementsByTagName("stream");
 
-      // Mostrar los datos en tu página web
-      const streamInfo = `Nombre: ${name}<br>
-                          Tiempo: ${time}<br>
-                          Ancho de banda de entrada: ${bwIn}<br>
-                          Ancho de banda de salida: ${bwOut}<br><br>`;
+      // Recorrer los elementos de stream
+      for (let i = 0; i < streamElements.length; i++) {
+        const name =
+          streamElements[i].getElementsByTagName("name")[0].textContent;
 
-      document.getElementById("streamData").innerHTML += streamInfo;
-    }
-  })
-  .catch((error) => {
-    console.log("Error:", error);
-  });
+        let aux = "";
+
+        await fetch(
+          "http://localhost:5000/api/users/getProfileByStreamName/" + name
+        )
+          .then((response) => response.blob())
+          .then((blob) => {
+            // Crear una URL de objeto para la imagen
+            const imageUrl = URL.createObjectURL(blob);
+
+            aux = imageUrl;
+          })
+          .catch((exception) => {
+            console.log(exception);
+            error.value.type = true;
+            error.value.message =
+              "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
+          });
+        streams.value.push({ name, photoUrl: aux });
+      }
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+});
 </script>
 
 <style scoped>
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 10px;
+}
+
 .padding_cero {
   padding-top: 0px;
+}
+
+.xx-large {
+  font-size: xx-large;
 }
 </style>

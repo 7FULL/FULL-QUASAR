@@ -18,6 +18,11 @@ const routes = [
         path: "/profile/:name",
         component: () => import("pages/Profile.vue"),
       },
+      {
+        name: "streaming",
+        path: "/streaming/:name",
+        component: () => import("pages/ViewingStreaming.vue"),
+      },
     ],
   },
 

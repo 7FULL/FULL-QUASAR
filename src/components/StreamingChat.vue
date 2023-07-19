@@ -1,6 +1,12 @@
 <template>
   <div class="flex flex-center all bg-black">
-    <Player autoplay class="dp-block wlg">
+    <Player
+      autoplay
+      class="dp-block wlg"
+      @vm-error="playbackEnded = true"
+      @vmReady="error = false"
+      v-if="!playbackEnded"
+    >
       <Hls version="latest" live>
         <!--<source
             data-src="http://localhost:8080/hls/test.m3u8"
@@ -33,6 +39,16 @@
         </Controls>
       </DefaultUi>
     </Player>
+
+    <div v-if="error && !playbackEnded" class="wlg flex flex-center bg-black">
+      <q-spinner-ios size="100px" color="white" />
+    </div>
+
+    <div v-if="playbackEnded" class="wlg flex flex-center bg-black">
+      <div class="text-h3 text-white">Transmisión finalizada</div>
+    </div>
+
+    <!-- Chat -->
 
     <div
       class="chat-container wsm bg-white"
@@ -95,16 +111,25 @@ const props = defineProps(["src", "room"]);
 
 const conected = ref(false);
 
+const playbackEnded = ref(false);
+
 socket.on("connect", () => {
   conected.value = true;
   socket.emit("join-room", props.room);
 });
+
+const error = ref(true);
 
 const userStore = userDataStore();
 
 const messages = ref([]);
 
 const newMessage = ref("");
+
+const errorReceived = () => {
+  playbackEnded.value = true;
+  error.value = true;
+};
 
 socket.on("receive-chat-message", (message, author) => {
   printMessage(message, author);
@@ -166,18 +191,6 @@ function scrollToBottom() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 }
-
-const socketRMTP = new WebSocket("ws://localhost:8080/rtmp-status");
-
-socketRMTP.addEventListener("open", () => {
-  console.log("Conexión WebSocket establecida");
-});
-
-socketRMTP.addEventListener("message", (event) => {
-  const data = JSON.parse(event.data);
-  const activeConnections = data.nclients;
-  console.log("Número de conexiones activas:", activeConnections);
-});
 </script>
 
 <style scoped>
