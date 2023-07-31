@@ -32,7 +32,7 @@
             label="OK"
             color="primary"
             v-close-popup
-            @click="$emit('closed', userInput)"
+            @click="close"
           />
         </q-card-actions>
       </q-card>
@@ -42,6 +42,8 @@
 
 <script setup>
 import { ref, watch } from "vue";
+
+const emit = defineEmits(["closed"]);
 
 const props = defineProps([
   "open",
@@ -56,6 +58,18 @@ const props = defineProps([
 const userInput = ref("");
 
 const isOpen = ref(false);
+
+const close = () => {
+  if (userInput.value) {
+    emit("closed", userInput.value);
+  } else {
+    emit("closed");
+  }
+
+  isOpen.value = false;
+  //Limpiamos el input
+  userInput.value = "";
+};
 
 watch(
   () => props.open,

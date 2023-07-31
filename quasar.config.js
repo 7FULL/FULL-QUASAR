@@ -31,6 +31,9 @@ module.exports = configure(function (/* ctx */) {
       {
         path: "vueRecaptchaInitialization.js",
       },
+      {
+        path: "googleLogin.js",
+      },
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

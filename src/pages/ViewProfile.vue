@@ -324,6 +324,11 @@ const userStore = userDataStore();
 
 const router = useRouter();
 
+/*if (!userStore.userData.logged) {
+  showNotif("Necesitas estar logueado para editar tu perfil", "red-5");
+  router.push({ name: "home" });
+}*/
+
 const emit = defineEmits(["closeProfile"]);
 
 const isOpenPass = ref(false);
@@ -491,7 +496,6 @@ const changePhone = (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       if (data.status == 200) {
         userStore.userData.phone = changePhon.value.newPhone;
 
@@ -503,7 +507,7 @@ const changePhone = (e) => {
       } else if (data.status == 400) {
         changePhon.value.password = "";
 
-        showNotif(data.message, "red-5");
+        showNotif(data.result, "red-5");
       } else {
         showNotif(
           "Parece que hubo un error con nuestros servidores, por favor intente de nuevo más tarde",

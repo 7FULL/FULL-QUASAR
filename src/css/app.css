@@ -255,3 +255,47 @@ a {
   text-decoration: none;
   color: black;
 }
+
+.dp-inline {
+  display: inline;
+}
+
+.dp-inline-block {
+  display: inline-block;
+}
+
+.pt-xxs {
+  padding-top: 2%;
+}
+
+.pt-xs {
+  padding-top: 5%;
+}
+
+.pt-sm {
+  padding-top: 10%;
+}
+
+.pt-md {
+  padding-top: 15%;
+}
+
+.pt-lg {
+  padding-top: 20%;
+}
+
+.pt-xl {
+  padding-top: 25%;
+}
+
+.pt-xxl {
+  padding-top: 30%;
+}
+
+.pt-0 {
+  padding-top: 0;
+}
+
+aside {
+  position: fixed !important;
+}

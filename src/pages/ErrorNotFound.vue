@@ -1,31 +1,22 @@
 <template>
-  <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
+  <q-page class="flex flex-center">
     <div>
-      <div style="font-size: 30vh">
-        404
-      </div>
-
-      <div class="text-h2" style="opacity:.4">
-        Oops. Nothing here...
-      </div>
-
+      <p class="text-h6 q-mb-md">Parece que te has perdido</p>
       <q-btn
-        class="q-mt-xl"
-        color="white"
-        text-color="blue"
-        unelevated
-        to="/"
-        label="Go Home"
-        no-caps
+        color="primary"
+        label="Volver a la página de inicio"
+        @click="redirectToHome"
       />
     </div>
-  </div>
+  </q-page>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { useRouter } from "vue-router";
 
-export default defineComponent({
-  name: 'ErrorNotFound'
-})
+const router = useRouter();
+
+const redirectToHome = () => {
+  router.push({ name: "home" });
+};
 </script>

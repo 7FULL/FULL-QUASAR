@@ -55,16 +55,6 @@
               </q-avatar>
               <q-tooltip class="bg-green">Ver perfil</q-tooltip>
             </q-btn>
-            <q-btn
-              color="primary"
-              icon="logout"
-              @click="closeSession"
-              class="q-ml-sm"
-              size="md"
-              round
-            >
-              <q-tooltip class="bg-red">Cerrar sesión</q-tooltip>
-            </q-btn>
           </div>
           <div v-else>
             <q-btn
@@ -80,13 +70,23 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
+        <q-item-label header />
         <EssentialLink
           v-for="link in linksList"
           :key="link.title"
           v-bind="link"
         />
+        <q-btn
+          v-if="isLogged"
+          color="primary"
+          label="Cerrar sesión"
+          icon-right="logout"
+          @click="closeSession"
+          class="q-ml-sm"
+          style="width: 95%; margin-top: 134%"
+        >
+          <q-tooltip class="bg-red">Cerrar sesión</q-tooltip>
+        </q-btn>
       </q-list>
     </q-drawer>
 
@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import login from "../components/LoginPage.vue";
+import login from "../components/LoginComponent.vue";
 import { ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import { RouterLink, useRouter } from "vue-router";
@@ -125,46 +125,28 @@ const dropdownLogin = ref(false);
 
 const linksList = [
   {
-    title: "Docs",
-    caption: "quasar.dev",
+    title: "Home",
+    caption: "Página principal",
     icon: "school",
-    link: "https://quasar.dev",
+    link: "/",
   },
   {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
+    title: "Streamings",
+    caption: "Mira a tus sreamers favoritos",
+    icon: "token",
+    link: "/streamings",
   },
   {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
+    title: "Perfil",
+    caption: "Configura tu perfil",
+    icon: "person",
+    link: "/viewProfile",
   },
   {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Twitter",
-    caption: "@quasarframework",
-    icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
+    title: "Mensajes directos",
+    caption: "Habla con la gente que te importa",
+    icon: "mail",
+    link: "/dms",
   },
 ];
 
@@ -220,4 +202,4 @@ const viewProfile = () => {
 };
 </script>
 
-<style scoped></style>
+<style></style>

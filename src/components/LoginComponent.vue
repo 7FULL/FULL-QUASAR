@@ -25,6 +25,7 @@
                   <a href="#" class="text-primary">¿Olvidaste tu contraseña?</a>
                 </q-item-section>
               </q-item>
+              <GoogleLogin :callback="googleLogged" />
               <q-card-actions>
                 <q-btn
                   color="primary"
@@ -156,6 +157,10 @@ const tabs = [
 const verification = ref({
   token: "",
 });
+
+const googleLogged = (response) => {
+  console.log("Handle the response", response);
+};
 
 const isVerifying = ref(false);
 
@@ -324,6 +329,7 @@ const logged = async () => {
         userData.value.name = data.result.username;
         userData.value.email = data.result.email;
         userData.value.emailVerified = data.result.emailVerified;
+        userData.value.streamKey = data.result.streamKey;
 
         //console.log(userData.value);
 
@@ -331,7 +337,7 @@ const logged = async () => {
           userData.value.profile = data.result.profile;
 
           await fetch(
-            "http://127.0.0.1:5000/api/users/profile/" + userData.value.profile
+            "http://127.0.0.1:5000/api/users/profile/" + userData.value.name
           )
             .then((response) => response.blob())
             .then((blob) => {
@@ -358,6 +364,8 @@ const logged = async () => {
       }
 
       userStore.userData = userData.value;
+
+      userStore.logged = true;
 
       if (!userData.value.emailVerified) {
         isVerifying.value = true;

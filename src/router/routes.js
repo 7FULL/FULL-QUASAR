@@ -21,16 +21,29 @@ const routes = [
       {
         name: "streaming",
         path: "/streaming/:name",
-        component: () => import("pages/ViewingStreaming.vue"),
+        component: () => import("pages/ViewStreaming.vue"),
+      },
+      {
+        name: "streamings",
+        path: "/streamings",
+        component: () => import("pages/StreamingList.vue"),
+      },
+      {
+        name: "dms",
+        path: "/dms",
+        component: () => import("pages/DirectMessages.vue"),
+      },
+      {
+        name: "dm",
+        path: "/dm/:name",
+        component: () => import("pages/DirectMessage.vue"),
+      },
+      //Para los 404
+      {
+        path: "/:catchAll(.*)*",
+        component: () => import("pages/ErrorNotFound.vue"),
       },
     ],
-  },
-
-  // Always leave this as last one,
-  // but you can also remove it
-  {
-    path: "/:catchAll(.*)*",
-    component: () => import("pages/ErrorNotFound.vue"),
   },
 ];
 

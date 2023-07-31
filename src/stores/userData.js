@@ -10,6 +10,7 @@ export const userDataStore = defineStore("userDataStore", () => {
     phone: "",
     emailVerified: "",
     description: "",
+    streamKey: "",
   };
 
   const resetData = () => {
@@ -19,6 +20,7 @@ export const userDataStore = defineStore("userDataStore", () => {
     userData.value.phone = "";
     userData.value.emailVerified = "";
     userData.value.description = "";
+    userData.value.streamKey = "";
     logged = false;
   };
 
