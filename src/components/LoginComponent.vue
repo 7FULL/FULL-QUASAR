@@ -80,6 +80,7 @@
               >
                 Acepto los términos y condiciones
               </q-checkbox>
+              <GoogleLogin :callback="googleRegistered" />
               <q-card-actions>
                 <q-btn
                   color="primary"
@@ -140,6 +141,7 @@ import ErrorPopUp from "./ErrorPopUp.vue";
 import PopUp from "./PopUp.vue";
 import { userDataStore } from "../stores/userData.js";
 import { useQuasar } from "quasar";
+import { decodeCredential } from "vue3-google-login";
 
 const userStore = userDataStore();
 
@@ -159,7 +161,21 @@ const verification = ref({
 });
 
 const googleLogged = (response) => {
-  console.log("Handle the response", response);
+  const player = decodeCredential(response.credential);
+
+  logged(player.name);
+};
+
+const googleRegistered = (response) => {
+  const player = decodeCredential(response.credential);
+
+  registerData.value.username = player.name;
+  registerData.value.email = player.email;
+  registerData.value.password = player.sub;
+  registerData.value.confirmPassword = player.sub;
+  registerData.value.phone = "000000000";
+
+  register();
 };
 
 const isVerifying = ref(false);
@@ -308,7 +324,11 @@ const closeModal = () => {
   switchTab("login");
 };
 
-const logged = async () => {
+const logged = async (name = "") => {
+  if (name != "") {
+    userData.value.name = name;
+  }
+
   let id = "";
 
   if (userData.value.name != "") {
@@ -323,6 +343,8 @@ const logged = async () => {
   await fetch("http://127.0.0.1:5000/api/users/" + id)
     .then((response) => response.json())
     .then(async (data) => {
+      console.log(data);
+
       if (data.status == 200) {
         userData.value.phone = data.result.phone;
         userData.value.description = data.result.description;
@@ -353,6 +375,20 @@ const logged = async () => {
                 "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
             });
         }
+
+        userStore.userData = userData.value;
+
+        userStore.logged = true;
+
+        if (!userData.value.emailVerified) {
+          isVerifying.value = true;
+        }
+
+        showNotif("Bienvenido/a de vuelta " + userData.value.name);
+        emit("logged");
+      } else if (data.status == 404) {
+        error.value.type = true;
+        error.value.message = data.result;
       } else {
         error.value.type = true;
         error.value.message =
@@ -362,14 +398,6 @@ const logged = async () => {
       if (aux != null) {
         userData.value.profile = aux;
       }
-
-      userStore.userData = userData.value;
-
-      userStore.logged = true;
-
-      if (!userData.value.emailVerified) {
-        isVerifying.value = true;
-      }
     })
     .catch((exception) => {
       console.log(exception);
@@ -377,9 +405,6 @@ const logged = async () => {
       error.value.message =
         "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
     });
-
-  showNotif("Bienvenido/a de vuelta " + userData.value.name);
-  emit("logged");
 };
 
 const switchTab = (tab) => {
@@ -447,7 +472,10 @@ const login = async (e) => {
 };
 
 const register = async (e) => {
-  e.preventDefault();
+  try {
+    e.preventDefault();
+  } catch (error) {}
+
   if (registerData.value.password != registerData.value.confirmPassword) {
     error.value.type = true;
     error.value.message = "Las contraseñas no coinciden";
@@ -492,7 +520,6 @@ const register = async (e) => {
       error.value.type = true;
       error.value.message = "Debes completar el captcha";
     } else {
-      console.log(registerData.value.agree);
       error.value.type = true;
       error.value.message = "Debe aceptar los términos y condiciones";
     }
