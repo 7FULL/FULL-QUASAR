@@ -83,7 +83,7 @@
           icon-right="logout"
           @click="closeSession"
           class="q-ml-sm"
-          style="width: 95%; margin-top: 134%"
+          style="width: 95%; margin-top: 124%"
         >
           <q-tooltip class="bg-red">Cerrar sesión</q-tooltip>
         </q-btn>

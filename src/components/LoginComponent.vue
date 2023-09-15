@@ -25,6 +25,13 @@
                   <a href="#" class="text-primary">¿Olvidaste tu contraseña?</a>
                 </q-item-section>
               </q-item>
+              <q-item class="pl-0">
+                <q-checkbox
+                  v-model="loginData.remember"
+                  label="Recordarme"
+                  class="flex"
+                />
+              </q-item>
               <GoogleLogin :callback="googleLogged" />
               <q-card-actions>
                 <q-btn
@@ -109,41 +116,36 @@
     </q-card>
   </q-dialog>
 
+  <EmailVerification @verified="emailVerified" :isOpen="isVerifying" />
+
   <ErrorPopUp
     :error="error.message"
     :open="error.type"
     @closed="clearError"
   ></ErrorPopUp>
-
-  <PopUp
-    :open="isVerifying"
-    msg="Parece que no tienes verificado tu email. ¿Quieres hacerlo ahora?"
-    title="Verificar email"
-    persistent="true"
-    cancel="true"
-    @closed="isVerifyingEmail"
-  ></PopUp>
-
-  <PopUp
-    :open="isVerifyingEmailPopUp"
-    msg="Introduce el token que te hemos enviado a tu correo electrónico"
-    title="Verificar email"
-    persistent="true"
-    input="true"
-    @closed="checkToken"
-  ></PopUp>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { Checkbox } from "vue-recaptcha";
 import ErrorPopUp from "./ErrorPopUp.vue";
-import PopUp from "./PopUp.vue";
+import EmailVerification from "./EmailVerification.vue";
 import { userDataStore } from "../stores/userData.js";
 import { useQuasar } from "quasar";
 import { decodeCredential } from "vue3-google-login";
 
 const userStore = userDataStore();
+
+onMounted(() => {
+  if (localStorage.getItem("username")) {
+    let name = localStorage.getItem("username");
+
+    // Para que siga recordando
+    loginData.value.remember = true;
+
+    logged(name);
+  }
+});
 
 const tabs = [
   {
@@ -156,9 +158,11 @@ const tabs = [
   },
 ];
 
-const verification = ref({
-  token: "",
-});
+const emailVerified = () => {
+  userData.value.emailVerified = true;
+  userStore.userData = userData.value;
+  showNotif("Email verificado correctamente");
+};
 
 const googleLogged = (response) => {
   const player = decodeCredential(response.credential);
@@ -179,8 +183,6 @@ const googleRegistered = (response) => {
 };
 
 const isVerifying = ref(false);
-
-const isVerifyingEmailPopUp = ref(false);
 
 const isOpenF = ref(false);
 
@@ -207,15 +209,11 @@ function showNotif(msg) {
   });
 }
 
-const emailPopUp = ref({
-  type: 0, // 1 -> login, 2 -> register
-  message: "",
-});
-
 const loginData = ref({
   username: "",
   password: "",
   token: "",
+  remember: false,
 });
 
 const registerData = ref({
@@ -247,60 +245,6 @@ watch(
     isOpenF.value = newVal;
   }
 );
-
-const isVerifyingEmail = () => {
-  verification.value.token = "";
-  isVerifying.value = false;
-  isVerifyingEmailPopUp.value = true;
-  fetch("http://localhost:5000/api/users/registerToken/" + userData.value.name)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status != 200) {
-        emailPopUp.value.type = 1;
-        emailPopUp.value.message =
-          "Parece que hubo un problema con tu token de autenticación, por favor intenta de nuevo mas tarde";
-      }
-    });
-};
-
-const checkToken = (userInput) => {
-  userInput = {
-    token: userInput,
-  };
-
-  fetch("http://localhost:5000/api/users/checkToken/" + userData.value.name, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userInput),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status == 200) {
-        isVerifying.value = false;
-        userData.value.emailVerified = true;
-        userStore.userData = userData.value;
-        showNotif("Email verificado correctamente");
-      } else if (data.status == 401) {
-        error.value.type = true;
-        error.value.message = "Token incorrecto";
-        isVerifying.value = false;
-      } else {
-        error.value.type = true;
-        error.value.message =
-          "Parece que hubo un problema con nuestras bases de datos, porfavor intentelo de nuevo mas tarde";
-      }
-
-      verification.value.token = "";
-    })
-    .catch((exception) => {
-      console.error("Error:", exception);
-      error.value.type = true;
-      error.value.message =
-        "Parece que hubo un problema con nuestros servidores, porfavor intentelo de nuevo mas tarde";
-    });
-};
 
 function captchaV3() {
   return new Promise((resolve, reject) => {
@@ -335,6 +279,13 @@ const logged = async (name = "") => {
     id = userData.value.name;
   } else {
     id = userData.value.email;
+  }
+
+  // En caso de que el usuario haya clickeado en recuerdame guardamos su nombre de usuario en el local storage
+  if (loginData.value.remember) {
+    localStorage.setItem("username", userData.value.name);
+  } else {
+    localStorage.removeItem("username");
   }
 
   let aux = null;

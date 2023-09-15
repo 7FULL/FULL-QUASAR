@@ -52,6 +52,15 @@
           autogrow
         ></q-input>
 
+        <!-- En caso de que el usuario no tenga el email verificado mostramos este boton para que lo verifique -->
+        <q-btn
+          v-if="!userStore.userData.emailVerified"
+          class="q-mt-md wxl"
+          color="secondary"
+          label="Verificar Email"
+          @click="verifyEmail"
+        ></q-btn>
+
         <div class="flex justify-evenly q-mb-md">
           <div class="col">
             <q-input
@@ -291,6 +300,8 @@
       @closed="deleteUser"
     />
   </q-page>
+
+  <EmailVerification @verified="emailVerified" :isOpen="isVerifying" />
 </template>
 
 <script setup>
@@ -300,10 +311,22 @@ import { userDataStore } from "../stores/userData.js";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import PopUp from "src/components/PopUp.vue";
+import EmailVerification from "../components/EmailVerification.vue";
 
 const passwordPlaceholder = ref("********");
 
 const $q = useQuasar();
+
+const isVerifying = ref(false);
+
+const verifyEmail = () => {
+  isVerifying.value = true;
+};
+
+const emailVerified = () => {
+  userStore.userData.emailVerified = true;
+  showNotif("Email verificado correctamente");
+};
 
 function showNotif(msg, color = "gray-4") {
   $q.notify({

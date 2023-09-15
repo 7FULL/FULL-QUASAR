@@ -34,7 +34,7 @@ const streams = ref([]);
 
 //Lo hacemos en el mounted para que se ejecute cuando se cargue el DOM
 onMounted(() => {
-  fetch("http://16.171.91.118:8080/stat")
+  fetch("http://localhost:8080/stat")
     .then((response) => response.text())
     .then(async (data) => {
       // Procesar los datos XML
