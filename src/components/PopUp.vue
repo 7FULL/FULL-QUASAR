@@ -45,6 +45,15 @@ import { ref, watch } from "vue";
 
 const emit = defineEmits(["closed"]);
 
+// Los parametros y sus funciones son las siguientes:
+// open: Boolean, // Si el dialogo esta abierto o no
+// msg: String, // El mensaje que se muestra en el dialogo
+// title: String, // El titulo del dialogo
+// persistent: Boolean, // Si el dialogo se cierra al hacer click fuera de el
+// cancel: Boolean, // Si el dialogo tiene un boton de cancelar
+// cancelText: String, // El texto del boton de cancelar
+// input: Boolean, // Si el dialogo tiene un input
+
 const props = defineProps([
   "open",
   "msg",

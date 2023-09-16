@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="hHh lpr lff">
-    <q-header elevated>
+  <q-layout view="hHh LpR fFf">
+    <q-header>
       <q-toolbar class="flex justify-between bg-secondary">
         <div class="wxs">
           <q-btn
@@ -185,6 +185,10 @@ const closeSession = () => {
   isLogged.value = false;
   dropdownLogin.value = false;
   dropdown.value = false;
+
+  if (localStorage.getItem("username") != null) {
+    localStorage.removeItem("username");
+  }
 
   router.push({ name: "home" });
   //emit('closeSession');

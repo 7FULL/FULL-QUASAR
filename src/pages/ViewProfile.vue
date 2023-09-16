@@ -347,10 +347,10 @@ const userStore = userDataStore();
 
 const router = useRouter();
 
-/*if (!userStore.userData.logged) {
+if (!userStore.logged) {
   showNotif("Necesitas estar logueado para editar tu perfil", "red-5");
   router.push({ name: "home" });
-}*/
+}
 
 const emit = defineEmits(["closeProfile"]);
 

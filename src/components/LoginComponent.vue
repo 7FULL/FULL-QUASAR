@@ -16,13 +16,23 @@
               <q-input
                 v-model="loginData.password"
                 label="Contraseña"
-                type="password"
+                :type="showEyeLogin ? 'password' : 'text'"
                 required
                 minlength="7"
-              />
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="showEyeLogin ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="showEyeLogin = !showEyeLogin"
+                  />
+                </template>
+              </q-input>
               <q-item side inset-separator v-ripple class="q-mt-sm">
                 <q-item-section>
-                  <a href="#" class="text-primary">¿Olvidaste tu contraseña?</a>
+                  <a href="#" class="text-primary" @click="restorePasswordPopUp"
+                    >¿Olvidaste tu contraseña?</a
+                  >
                 </q-item-section>
               </q-item>
               <q-item class="pl-0">
@@ -60,17 +70,33 @@
               <q-input
                 v-model="registerData.password"
                 label="Contraseña"
-                type="password"
+                :type="showEye ? 'password' : 'text'"
                 required
                 minlength="7"
-              />
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="showEye ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="showEye = !showEye"
+                  />
+                </template>
+              </q-input>
               <q-input
                 v-model="registerData.confirmPassword"
                 label="Confirmar contraseña"
-                type="password"
+                :type="showEyeConfirm ? 'password' : 'text'"
                 required
                 minlength="7"
-              />
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="showEyeConfirm ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="showEyeConfirm = !showEyeConfirm"
+                  />
+                </template>
+              </q-input>
               <q-input
                 v-model="registerData.phone"
                 label="Número de teléfono"
@@ -123,6 +149,16 @@
     :open="error.type"
     @closed="clearError"
   ></ErrorPopUp>
+
+  <!-- PopUp para el has olvidado la contraseña -->
+  <PopUp
+    :open="restorePassword"
+    title="Recuperacion de contraseña"
+    msg="Se ha enviado un correo electrónico a tu cuenta de correo electrónico. Sigue las instrucciones para recuperar tu contraseña."
+    :persistent="true"
+    :cancel="false"
+    :input="false"
+  ></PopUp>
 </template>
 
 <script setup>
@@ -133,8 +169,54 @@ import EmailVerification from "./EmailVerification.vue";
 import { userDataStore } from "../stores/userData.js";
 import { useQuasar } from "quasar";
 import { decodeCredential } from "vue3-google-login";
+import PopUp from "./PopUp.vue";
+
+const showEyeConfirm = ref(true);
+
+const showEye = ref(true);
+
+const showEyeLogin = ref(true);
 
 const userStore = userDataStore();
+
+const restorePassword = ref(false);
+
+const restorePasswordPopUp = () => {
+  if (loginData.value.username == "") {
+    showNotif(
+      "Debes introducir un nombre de usuario o correo electrónico",
+      "red-5"
+    );
+    return;
+  }
+
+  fetch(
+    "http://localhost:5000/api/users/passWordRecovery/" +
+      loginData.value.username,
+    {
+      method: "POST",
+    }
+  )
+    .then((response) => response.json())
+    .then(async (data) => {
+      console.log(data);
+      if (data.status == 200 || data.status == 404) {
+        restorePassword.value = true;
+      } else {
+        error.value.type = true;
+        error.value.message =
+          "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
+      }
+    })
+    .catch((exception) => {
+      console.log(exception);
+      error.value.type = true;
+      error.value.message =
+        "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
+    });
+
+  restorePassword.value = true;
+};
 
 onMounted(() => {
   if (localStorage.getItem("username")) {
@@ -167,7 +249,7 @@ const emailVerified = () => {
 const googleLogged = (response) => {
   const player = decodeCredential(response.credential);
 
-  logged(player.name);
+  logged(player.email);
 };
 
 const googleRegistered = (response) => {
@@ -199,10 +281,10 @@ const error = ref({
 
 const $q = useQuasar();
 
-function showNotif(msg) {
+function showNotif(msg, color = "gray-4") {
   $q.notify({
     message: msg,
-    color: "gray-4",
+    color: color,
     position: "top",
     timeout: 1500,
     progress: true,
@@ -373,7 +455,6 @@ const login = async (e) => {
   userData.value.description = "";
   userData.value.profile = "src/assets/img/logoUserDefault.png";
 
-  isVerifyingEmailPopUp.value = false;
   isVerifying.value = false;
 
   const token = await captchaV3();

@@ -80,8 +80,18 @@
       </div>
     </div>
     <!-- Conectando... -->
-    <div class="wsm flex flex-center bg-white chat-container" v-else>
+    <div
+      class="wsm flex flex-center bg-white chat-container"
+      v-else-if="!errorConnectingChat"
+    >
       <q-spinner-ios size="100px" color="primary" />
+    </div>
+    <!-- Error -->
+    <div
+      v-if="!conected && errorConnectingChat"
+      class="wsm flex flex-center bg-white chat-container"
+    >
+      <div class="text-h6 text-black">No se pudo conectar al chat</div>
     </div>
   </div>
 </template>
@@ -113,10 +123,19 @@ const conected = ref(false);
 
 const playbackEnded = ref(false);
 
+const errorConnectingChat = ref(false);
+
 socket.on("connect", () => {
   conected.value = true;
   socket.emit("join-room", props.room);
 });
+
+// En caso de que no se llegue a conectar
+setTimeout(() => {
+  if (!conected.value) {
+    errorConnectingChat.value = true;
+  }
+}, 5000);
 
 const error = ref(true);
 

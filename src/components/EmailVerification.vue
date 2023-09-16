@@ -27,7 +27,7 @@
 <script setup>
 import PopUp from "./PopUp.vue";
 import ErrorPopUp from "./ErrorPopUp.vue";
-import { defineProps, defineEmits, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { userDataStore } from "../stores/userData.js";
 
 const userStore = userDataStore();

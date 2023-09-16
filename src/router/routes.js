@@ -38,6 +38,11 @@ const routes = [
         path: "/dm/:name",
         component: () => import("pages/DirectMessage.vue"),
       },
+      {
+        name: "passwordRecovery",
+        path: "/recoveryPassword/:token",
+        component: () => import("pages/PasswordRecovery.vue"),
+      },
       //Para los 404
       {
         path: "/:catchAll(.*)*",
