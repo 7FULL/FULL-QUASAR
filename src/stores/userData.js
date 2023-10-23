@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 export const userDataStore = defineStore("userDataStore", () => {
-  const logged = false;
+  let logged = false;
 
   const userData = {
     profile: "src/assets/img/logoUserDefault.png",
