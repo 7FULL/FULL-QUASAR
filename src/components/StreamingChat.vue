@@ -7,7 +7,7 @@
       @vmReady="error = false"
       v-if="!playbackEnded"
     >
-      <Hls version="latest" live>
+      <Hls version="1.4.14" live>
         <!--<source
             data-src="http://localhost:8080/hls/test.m3u8"
             type="application/x-mpegURL"
@@ -69,6 +69,7 @@
           outlined
           dense
           placeholder="Escribe tu mensaje..."
+          maxlength="100"
         />
         <q-btn
           @click="sendMessage"
@@ -233,7 +234,8 @@ function scrollToBottom() {
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 40.5rem;
+  height: 40rem;
+  overflow-y: hidden;
 }
 
 .chat-messages {
@@ -242,12 +244,17 @@ function scrollToBottom() {
   padding: 10px;
 }
 
+.chat-message-content{
+  word-wrap: break-word;
+}
+
 .chat-message {
   margin-bottom: 10px;
 }
 
 .chat-message-author {
   font-weight: bold;
+  word-wrap: break-word;
 }
 
 .chat-input {

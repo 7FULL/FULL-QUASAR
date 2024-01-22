@@ -49,6 +49,7 @@ onMounted(() => {
 
         let aux = "";
 
+        /*
         await fetch(
           "http://localhost:5000/api/users/getProfileByStreamName/" + name
         )
@@ -67,7 +68,13 @@ onMounted(() => {
             error.value.type = true;
             error.value.message =
               "Parece que hay un problema con nuestros servidores. Inténtelo de nuevo más tarde";
-          });
+          });*/
+
+        //If there is no image, we use the default one
+        if (aux === "") {
+          aux = "src/assets/img/logoUserDefault.png";
+        }
+
         streams.value.push({ name, photoUrl: aux });
       }
     })
